@@ -5,48 +5,46 @@ var fs = require('fs');
 
 var apikey = fs.readFileSync('./key/key.txt', 'utf8')
 
-var optionsget = {
-
-    host: 'api.pubg.com', // here only the domain name
-    // (no http/https !)
-    //port : 443,
-    path: '/tournaments', // the rest of the url with parameters if needed
-    headers: {
-        "Authorization": apikey,
-        "Accept": "application/vnd.api+json"
-    },
-    method: 'GET'
-
-};
-console.log(optionsget)
-
-var getheaders = {
-    "Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkMDBiNTM4MC0yMjc4LTAxMzgtZTMwNi03ZDVjOWM4YTdjZWUiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTgwMDUwMDk3LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImhhbXhhLW5pYXhpLWdtIn0.mBPXRtHwx82DxLivsuID5_JD3gHnO27wfEnU1iougXA",
-    "Accept": "application/vnd.api+json"
-
-};
 
 
-router.get('/getData', (req, res, next) => {
-    console.log(optionsget)
-    console.log(getheaders)
+router.post('/getData', (req, res, next) => {
+    let pl = [];
+    let plat = req.body.platform
+    console.log(req.body.playerName)
+    console.log(req.body.platform)
+    let playerName = req.body.playerName
+    const url = `/shards/${plat}/players?filter[playerNames]=${playerName}`
+    console.log(url)
+    var optionsget = {
 
+        host: 'api.pubg.com', // here only the domain name
+        // (no http/https !)
+        //port : 443,
+        path: url, // the rest of the url with parameters if needed
+        headers: {
+            "Authorization": apikey,
+            "Accept": "application/vnd.api+json"
+        },
+        method: 'GET'
+
+    };
     https.request(optionsget, (resp) => {
-        let data = '';
-
-
         resp.on('data', (chunk) => {
-            data += chunk;
+            pl += chunk;
         });
 
         resp.on('end', () => {
-            console.log(data)
-            res.json(data);
+            var player = JSON.parse(pl)
+            console.log(player)
+            console.log("Extracting player id: " + player.data[0].id)
+            res.json(player.data[0].id)
 
         });
 
 
-    }).end().on("error", (err) => {
+    }).end(
+
+    ).on("error", (err) => {
 
         console.log("Error: " + err.message);
     });
