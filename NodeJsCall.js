@@ -1,21 +1,24 @@
 var express = require('express');
 var router = express.Router();
 const https = require('https');
+var fs = require('fs');
 
-_EXTERNAL_URL = 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY';
+var apikey = fs.readFileSync('./key/key.txt', 'utf8')
 
 var optionsget = {
+
     host: 'api.pubg.com', // here only the domain name
     // (no http/https !)
     //port : 443,
     path: '/tournaments', // the rest of the url with parameters if needed
     headers: {
-        "Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkMDBiNTM4MC0yMjc4LTAxMzgtZTMwNi03ZDVjOWM4YTdjZWUiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTgwMDUwMDk3LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImhhbXhhLW5pYXhpLWdtIn0.mBPXRtHwx82DxLivsuID5_JD3gHnO27wfEnU1iougXA",
+        "Authorization": apikey,
         "Accept": "application/vnd.api+json"
     },
     method: 'GET'
 
 };
+console.log(optionsget)
 
 var getheaders = {
     "Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkMDBiNTM4MC0yMjc4LTAxMzgtZTMwNi03ZDVjOWM4YTdjZWUiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNTgwMDUwMDk3LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6ImhhbXhhLW5pYXhpLWdtIn0.mBPXRtHwx82DxLivsuID5_JD3gHnO27wfEnU1iougXA",
