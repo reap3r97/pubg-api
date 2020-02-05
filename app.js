@@ -21,9 +21,13 @@ mongoose.connection.on('connected', () => {
 
 });
 
-const apiCallFromNode = require('./NodeJsCall');
+const player = require('./routes/player');
+const season = require('./routes/season');
+const stats = require('./routes/seasonStats');
 
-app.use('/api', apiCallFromNode);
+app.use('/player', player);
+app.use('/season', season);
+app.use('/stats', stats);
 
 app.listen(PORT, () => {
     console.log('server started at port' + PORT);
